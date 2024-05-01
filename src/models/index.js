@@ -1,12 +1,21 @@
+'use strict';
+
+const { Sequelize } = require('sequelize');
+
 const DATABASE_URL = process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL;
 
-const {Sequelize, DataTypes } = require('sequelize');
+const sequelize = new Sequelize(DATABASE_URL, { logging: false });
 
-let sequelize = new Sequelize(DATABASE_URL, {logging:false});
-
-const peopleModel = require('./people.js');
+let Food, Cloth;
+try {
+  Food = require('./food');
+  Cloth = require('./cloth');
+} catch (error) {
+  console.error('Error loading models:', error);
+}
 
 module.exports = {
-    db: sequelize,
-    People: peopleModel(sequelize, DataTypes)
+  db: sequelize,
+  Food,
+  Cloth,
 };
