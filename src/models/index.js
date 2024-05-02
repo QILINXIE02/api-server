@@ -1,29 +1,30 @@
-const DATABASE_URL = process.env.NODE_ENV === 'test' ? 'sqlite:memory:' : process.env.DATABASE_URL;
+const DATABASE_URL = process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL;
 
 const { Sequelize, DataTypes } = require('sequelize');
+const Collection = require('./collection.js');
 
-// The "url" argument must be of type string. Received undefined
-// This typically means that the environment variable expected to contain the database URL isn't set or isn't being accessed correctly.
+// Import the models
+const foodSchema = require('./food.js'); // Updated file extension
+const peopleSchema = require('./people.js'); // Updated file extension
 
-// Specify the dialect based on the environment
-// Error: Dialect needs to be explicitly supplied as of v4.0.0
-let sequelizeOptions = {
-    dialect: process.env.NODE_ENV === 'test' ? 'sqlite' : 'postgres' // Assuming PostgreSQL for non-test environments
-};
+// Initialize Sequelize with the database URL
+let sequelize = new Sequelize(DATABASE_URL, { logging: false });
 
-if (process.env.NODE_ENV === 'test') {
-    sequelizeOptions.storage = 'memory'; // For SQLite
-}
+// Define models using schemas
+const foodModel = foodSchema(sequelize, DataTypes);
+const peopleModel = peopleSchema(sequelize, DataTypes);
 
-let sequelize = new Sequelize(DATABASE_URL, sequelizeOptions);
+// Define associations between models
+// Example: A person can have many favorite foods
+peopleModel.hasMany(foodModel, { foreignKey: 'personId', sourceKey: 'id' });
+foodModel.belongsTo(peopleModel, { foreignKey: 'personId', targetKey: 'id' });
 
-const peopleModel = require('./people.js');
-const foodModel = require('./food.js');
+// Create collections for easier CRUD operations
+const foodCollection = new Collection(foodModel);
+const peopleCollection = new Collection(peopleModel);
 
 module.exports = {
     db: sequelize,
-    People: peopleModel(sequelize, DataTypes),
-    Food: foodModel(sequelize, DataTypes),
+    Foods: foodCollection,
+    People: peopleCollection, // Corrected to match model name
 };
-
-

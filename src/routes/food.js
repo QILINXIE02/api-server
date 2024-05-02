@@ -1,13 +1,18 @@
 'use strict';
+
 const express = require('express');
-const { Food } = require('../models/food');
+const { db } = require('../models/index.js'); // Import db object which contains sequelize and DataTypes
+const peopleModule = require('./people.js');
+
+const People = peopleModule(db.sequelize, db.DataTypes).router;
+
 const router = express.Router();
 
-router.post('/api/food', createFood);
-router.get('/api/food', getFoods);
-router.get('/api/food/:id', getFood);
-router.put('/api/food/:id', updateFood);
-router.delete('/api/food/:id', deleteFood);
+router.post('/food', createFood);
+router.get('/food', getFoods);
+router.get('/food/:id', getFood);
+router.put('/food/:id', updateFood);
+router.delete('/food/:id', deleteFood);
 
 async function createFood(req, res) {
   try {
@@ -28,16 +33,16 @@ async function getFoods(req, res) {
   }
 }
 
-async function getFood(req, res) {
+async function getFood(request, response) {
   try {
-    const food = await Food.findByPk(req.params.id);
+    const food = await Food.findByPk(req.params.id, { include: [{ model: People, as: 'person' }] });
     if (!food) {
-      res.status(404).json({ error: 'Food not found' });
+      response.status(404).json({ error: 'Food not found' });
     } else {
-      res.json(food);
+      response.json(food);
     }
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    response.status(500).json({ error: error.message });
   }
 }
 
