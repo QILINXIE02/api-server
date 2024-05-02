@@ -1,10 +1,20 @@
 # api-server
 LAB3: Express REST API
-[class 2: instructor note: README](https://github.com/codefellows/seattle-javascript-401d58/blob/main/class-03/README.md)
+[class 3: instructor note: README](https://github.com/codefellows/seattle-javascript-401d58/blob/main/class-03/README.md)
 - [Render deployment...](https://api-server-yigi.onrender.com/)
 - [Render Database created demo](https://dashboard.render.com/d/dpg-cop7piacn0vc73do1mrg-a)
 - [Github action link](https://github.com/QILINXIE02/api-server/actions)
 - [PR to main](https://github.com/QILINXIE02/api-server/commit/44e54f7ae40991f51d65b317454e0e3008bf9563)
+
+LAb 4: Data Modeling
+[class 4: instructor note: README](https://github.com/codefellows/seattle-javascript-401d58/blob/main/class-04/README.md)
+- [Render deployment](https://api-server-yigi.onrender.com/)
+- [Github action link](https://github.com/QILINXIE02/api-server/actions)
+- [PR to main]()
+
+
+
+
 
 
 
@@ -26,5 +36,5 @@ To install the application, clone the repository to your local machine:
 - Mac Users: brew services start postgres
 ![alt text](image-2.png)
 
-Lab 3: UML
+Lab 3 & 4 : UML
 ![alt text](image.png)

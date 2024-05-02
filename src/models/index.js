@@ -25,3 +25,5 @@ module.exports = {
     People: peopleModel(sequelize, DataTypes),
     Food: foodModel(sequelize, DataTypes),
 };
+
+
