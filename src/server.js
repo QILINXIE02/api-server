@@ -7,22 +7,23 @@ const app = express();
 
 const notFoundHandler = require('./handlers/404.js');
 const errorHandler = require('./handlers/500.js');
-const clothesRoutes = require('./routes/cloth.js');
+const logger = require('./middleware/logger.js');
+const peopleRoutes = require('./routes/people.js');
 const foodRoutes = require('./routes/food.js');
-// const peopleRoutes = require('./routes/people.js');
 
 app.use(cors());
 app.use(express.json());
-app.use(clothesRoutes);
+
+app.use(logger);
+
+app.use(peopleRoutes);
 app.use(foodRoutes);
-
-// app.use(peopleRoutes);
-
 // Force an error for the tests
 app.get('/broken', (req,res,next) => next("whoops!"));
 
 app.use('*', notFoundHandler);
 app.use(errorHandler);
+
 
 function start(port) {
     app.listen(port, () => {
