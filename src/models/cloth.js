@@ -1,9 +1,7 @@
 'use strict';
 
-const { DataTypes } = require('sequelize');
-const sequelize = require('./index');
-
-const Cloth = sequelize.define('Cloth', {
+const Cloth = (db, DataTypes) =>
+ db.define('Cloth', {
   type: {
     type: DataTypes.STRING,
     allowNull: false,

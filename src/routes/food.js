@@ -1,17 +1,18 @@
 'use strict';
 const express = require('express');
-const Food = require('../models/food');
+const { Food } = require('../models/food');
 const router = express.Router();
 
-router.post('/', createFood);
-router.get('/', getFoods);
-router.get('/:id', getFood);
-router.put('/:id', updateFood);
-router.delete('/:id', deleteFood);
+router.post('/api/food', createFood);
+router.get('/api/food', getFoods);
+router.get('/api/food/:id', getFood);
+router.put('/api/food/:id', updateFood);
+router.delete('/api/food/:id', deleteFood);
 
 async function createFood(req, res) {
   try {
     const food = await Food.create(req.body);
+    console.log("food", food);
     res.status(201).json(food);
   } catch (error) {
     res.status(400).json({ error: error.message });

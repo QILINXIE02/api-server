@@ -1,13 +1,13 @@
 'use strict';
 const express = require('express');
-const Cloth = require('../models/cloth');
+const { Cloth } = require('../models/cloth');
 const router = express.Router();
 
-router.post('/', createCloth);
-router.get('/', getClothes);
-router.get('/:id', getCloth);
-router.put('/:id', updateCloth);
-router.delete('/:id', deleteCloth);
+router.post('/api/cloth', createCloth);
+router.get('/api/cloth', getClothes);
+router.get('/api/cloth/:id', getCloth);
+router.put('api/cloth/:id', updateCloth);
+router.delete('api/cloth/:id', deleteCloth);
 
 async function createCloth(req, res) {
   try {
