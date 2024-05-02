@@ -10,9 +10,9 @@ LAb 4: Data Modeling
 [class 4: instructor note: README](https://github.com/codefellows/seattle-javascript-401d58/blob/main/class-04/README.md)
 - [Render deployment](https://api-server-yigi.onrender.com/)
 - [Github action link](https://github.com/QILINXIE02/api-server/actions)
-- [PR to main]()
+- [PR to main](https://github.com/QILINXIE02/api-server/pull/3)
 
-
+test screenshot: ![alt text](image-1.png)
 
 
 
