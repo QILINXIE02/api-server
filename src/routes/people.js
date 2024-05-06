@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-
+const Collection = require('../models/collection.js');
 // RESTful route definitions
 router.get('/people', getPeople);
 router.get('/people/:id', getOnePerson);

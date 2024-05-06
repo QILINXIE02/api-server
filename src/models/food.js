@@ -10,6 +10,10 @@ const Food = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    personId: { // Add personId column
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
   });
 
   return Food;

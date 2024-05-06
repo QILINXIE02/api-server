@@ -4,8 +4,8 @@ require('dotenv').config();
 const express = require('express');
 const server = require('./src/server.js');
 const { db } = require('./src/models/index.js');
-const peopleRoutes = require('./routes/people');
-const foodRoutes = require('./routes/food');
+const peopleRoutes = require('./src/routes/people');
+const foodRoutes = require('./src/routes/food');
 
 async function start() {
     try {
