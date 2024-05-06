@@ -1,10 +1,7 @@
 'use strict';
 
 const express = require('express');
-const { db } = require('../models/index.js'); // Import db object which contains sequelize and DataTypes
-const peopleModule = require('./people.js');
-
-const People = peopleModule(db.sequelize, db.DataTypes).router;
+const { db } = require('../models/index.js');
 
 const router = express.Router();
 
@@ -16,8 +13,7 @@ router.delete('/food/:id', deleteFood);
 
 async function createFood(req, res) {
   try {
-    const food = await Food.create(req.body);
-    console.log("food", food);
+    const food = await db.Foods.create(req.body);
     res.status(201).json(food);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -26,29 +22,29 @@ async function createFood(req, res) {
 
 async function getFoods(req, res) {
   try {
-    const foods = await Food.findAll();
+    const foods = await db.Foods.findAll();
     res.json(foods);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
 
-async function getFood(request, response) {
+async function getFood(req, res) {
   try {
-    const food = await Food.findByPk(req.params.id, { include: [{ model: People, as: 'person' }] });
+    const food = await db.Foods.findByPk(req.params.id);
     if (!food) {
-      response.status(404).json({ error: 'Food not found' });
+      res.status(404).json({ error: 'Food not found' });
     } else {
-      response.json(food);
+      res.json(food);
     }
   } catch (error) {
-    response.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 }
 
 async function updateFood(req, res) {
   try {
-    const food = await Food.findByPk(req.params.id);
+    const food = await db.Foods.findByPk(req.params.id);
     if (!food) {
       res.status(404).json({ error: 'Food not found' });
     } else {
@@ -62,7 +58,7 @@ async function updateFood(req, res) {
 
 async function deleteFood(req, res) {
   try {
-    const food = await Food.findByPk(req.params.id);
+    const food = await db.Foods.findByPk(req.params.id);
     if (!food) {
       res.status(404).json({ error: 'Food not found' });
     } else {

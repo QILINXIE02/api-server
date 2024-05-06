@@ -12,9 +12,9 @@ LAb 4: Data Modeling
 - [Github action link](https://github.com/QILINXIE02/api-server/actions)
 - [PR to main](https://github.com/QILINXIE02/api-server/pull/3)
 
-test screenshot: ![alt text](image-1.png)
-
-
+5/6 redo of lab4: ![
+  thunder client get:
+](image-4.png)![alt text](image-3.png)
 
 
 

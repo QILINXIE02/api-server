@@ -10,9 +10,13 @@ const Food = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    personId: { // Add personId column
+    personId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references: {         // Define foreign key constraints
+        model: 'People',   // Name of the referenced model
+        key: 'id',         // Name of the referenced column
+      },
     },
   });
 
