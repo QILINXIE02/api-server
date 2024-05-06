@@ -1,51 +1,72 @@
 'use strict';
 
 const express = require('express');
+const { db } = require('../models/index.js');
 
 const router = express.Router();
 
-const {Food} = require('../models/index.js');
-
-router.get('/food', getFood);
-router.get('/food/:id', getOneFood);
 router.post('/food', createFood);
+router.get('/food', getFoods);
+router.get('/food/:id', getFood);
 router.put('/food/:id', updateFood);
 router.delete('/food/:id', deleteFood);
 
-async function getFood( request, response ) {
-    let qs = request.query;
-  let foods = await Food.findAll({where: qs});
-  let data = {count: foods.length, results: foods};
-  response.status(200).json(data);
+async function createFood(req, res) {
+  try {
+    const food = await db.Foods.create(req.body);
+    res.status(201).json(food);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 }
 
-async function getOneFood( request, response ) {
-  let id = request.params.id;
-  let data = await Food.findOne({where: {id:id}});
-  response.status(200).json(data);
+async function getFoods(req, res) {
+  try {
+    const foods = await db.Foods.findAll();
+    res.json(foods);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-async function createFood( request, response ) {
-  let data = request.body;
-  let newFood = await Food.create(data);
-  response.status(201).json(newFood);
+async function getFood(req, res) {
+  try {
+    const food = await db.Foods.findByPk(req.params.id);
+    if (!food) {
+      res.status(404).json({ error: 'Food not found' });
+    } else {
+      res.json(food);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
-async function updateFood( request, response ) {
-  let id = request.params.id;
-  let data = request.body;
-  let food = await Food.findOne({where: {id:id}});
-  let updatedFood = await food.update(data);
-  response.status(200).json(updatedFood);
+async function updateFood(req, res) {
+  try {
+    const food = await db.Foods.findByPk(req.params.id);
+    if (!food) {
+      res.status(404).json({ error: 'Food not found' });
+    } else {
+      await food.update(req.body);
+      res.json(food);
+    }
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
 }
 
-async function deleteFood( request, response ) {
-  let id = request.params.id;
-  let deletedFood = await Food.destroy( {where: {id:id}} );
-  if ( typeof deletedFood === "number" ) {
-    response.status(204).send(null);
-  } else {
-    throw new Error("Error deleting record");
+async function deleteFood(req, res) {
+  try {
+    const food = await db.Foods.findByPk(req.params.id);
+    if (!food) {
+      res.status(404).json({ error: 'Food not found' });
+    } else {
+      await food.destroy();
+      res.status(204).end();
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 }
 

@@ -1,27 +1,31 @@
-const DATABASE_URL = process.env.NODE_ENV === 'test' ? 'sqlite:memory:' : process.env.DATABASE_URL;
+'use strict';
 
 const { Sequelize, DataTypes } = require('sequelize');
+const Collection = require('./collection.js');
+const foodSchema = require('./food.js');
+const peopleSchema = require('./people.js');
 
-// The "url" argument must be of type string. Received undefined
-// This typically means that the environment variable expected to contain the database URL isn't set or isn't being accessed correctly.
+const DATABASE_URL = process.env.NODE_ENV === 'test' ? 'sqlite:memory' : process.env.DATABASE_URL;
 
-// Specify the dialect based on the environment
-// Error: Dialect needs to be explicitly supplied as of v4.0.0
-let sequelizeOptions = {
-    dialect: process.env.NODE_ENV === 'test' ? 'sqlite' : 'postgres' // Assuming PostgreSQL for non-test environments
-};
+let sequelize = new Sequelize(DATABASE_URL, {
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: false // Disable SSL
+  },
+  logging: false
+});
 
-if (process.env.NODE_ENV === 'test') {
-    sequelizeOptions.storage = 'memory'; // For SQLite
-}
+const foodModel = foodSchema(sequelize, DataTypes);
+const peopleModel = peopleSchema(sequelize, DataTypes);
 
-let sequelize = new Sequelize(DATABASE_URL, sequelizeOptions);
+peopleModel.hasMany(foodModel, { foreignKey: 'personId', sourceKey: 'id' });
+foodModel.belongsTo(peopleModel, { foreignKey: 'personId', targetKey: 'id' });
 
-const peopleModel = require('./people.js');
-const foodModel = require('./food.js');
+const foodCollection = new Collection(foodModel);
+const peopleCollection = new Collection(peopleModel);
 
 module.exports = {
-    db: sequelize,
-    People: peopleModel(sequelize, DataTypes),
-    Food: foodModel(sequelize, DataTypes),
+  db: sequelize,
+  Foods: foodCollection,
+  People: peopleCollection
 };
